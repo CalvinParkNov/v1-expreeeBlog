@@ -1,4 +1,4 @@
-const sql = require("../dbconfig/config");
+const { sql } = require("../dbconfig/config");
 
 //constructor
 const Post = function (post) {

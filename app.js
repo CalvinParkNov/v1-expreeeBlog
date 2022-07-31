@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", tasks);
-app.use("/signup", account);
+app.use("/login", account);
 const port = process.env.PORT;
 
 app.listen(port || 5000, function () {

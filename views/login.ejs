@@ -1,0 +1,17 @@
+<%- include("partials/header"); -%>
+    <h1>Login</h1>
+
+    <form class="" action="/login" method="post">
+        <div class="form-group">
+            ID
+            <input type="text" name="id">
+            password
+            <input type="password" name="password">
+            </div>
+            <button class="btn btn-primary" type="submit" name="button">login</button>
+            <button class="btn btn-primary" type="button" onclick="location.href='/login/signup'">Sign up</button>
+        </form>
+        
+
+
+    <%- include("partials/footer"); -%>
