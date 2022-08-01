@@ -3,7 +3,9 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/authConfig");
 
 exports.loginPage = (req, res) => {
-  res.render("login");
+  const token = req.cookies.access_token;
+  console.log(req.headers.authorization);
+  res.render("login", { token });
 };
 exports.login = (req, res) => {
   const { id, password } = req.body;
@@ -16,11 +18,19 @@ exports.login = (req, res) => {
     if (error) {
       return res.status(400).json({ message: error.message });
     }
-    const token = jwt.sign({ id: data.ID }, config.secret, {
-      expiresIn: "15m",
+    console.log(data.USER_ID, data.ID);
+    const token = jwt.sign(
+      { id: data.USER_ID, username: data.ID },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+    res.cookie("access_token", token, {
+      httpOnly: true,
     });
 
-    res.redirect("/");
+    return res.redirect("/");
   });
 };
 

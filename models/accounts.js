@@ -20,6 +20,7 @@ Account.userLogin = async (userId, result) => {
   //sql injection escape
   const exc_userId = sql.escape(userId.id);
   const sqlQuery = `SELECT
+                            USER_ID,
                             ID,
                             PASSWORD
                       FROM
@@ -31,7 +32,6 @@ Account.userLogin = async (userId, result) => {
       return result(error, null);
     }
     if (!res.length) {
-      return result({ message: "비밀번호 또는 아이디를 확인해주세요." }, null);
     } else if (userId.password !== res[0].PASSWORD || !res.length) {
       return result({ message: "비밀번호 또는 아이디를 확인해주세요." }, null);
     }

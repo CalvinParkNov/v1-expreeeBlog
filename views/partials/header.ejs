@@ -15,8 +15,12 @@
       </div>
         <ul class="nav navbar-nav navbar-right">
           <li id="home"><a href="/">HOME</a></li>
+          <% if(!token){%>
           <li id="login"><a href="/login">LOGIN</a></li>
-          <li id="compose"><a href="compose">COMPOSE</a></li>
+          <%}else {%>
+            <li id="login"><a href="/logout">LOG OUT</a></li>
+            <%}%>
+          <li id="compose"><a href="/compose">COMPOSE</a></li>
           <li id="about"><a href="/about">ABOUT US</a></li>
           <li id="contact"><a href="/contact">CONTACT US</a></li>
         </ul>

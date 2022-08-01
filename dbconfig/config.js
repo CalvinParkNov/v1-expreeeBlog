@@ -1,6 +1,5 @@
 const mysql = require("mysql");
 const express = require("express");
-const app = express();
 
 const sql = mysql.createPool({
   host: process.env.MYSQL_HOST,
