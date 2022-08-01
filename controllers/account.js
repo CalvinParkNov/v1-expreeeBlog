@@ -1,7 +1,6 @@
 const Account = require("../models/accounts");
 const jwt = require("jsonwebtoken");
 const config = require("../config/authConfig");
-// const { sessionStore } = require("../dbconfig/config");
 
 exports.loginPage = (req, res) => {
   res.render("login");
@@ -20,8 +19,8 @@ exports.login = (req, res) => {
     const token = jwt.sign({ id: data.ID }, config.secret, {
       expiresIn: "15m",
     });
-    req.session.token = token;
-    res.render("home");
+
+    res.redirect("/");
   });
 };
 
