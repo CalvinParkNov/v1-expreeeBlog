@@ -1,7 +1,12 @@
 <%- include("partials/header"); -%>
     <h1>Home</h1>
-    <%if(!data){%>
-    <%}else {%>
+    <%if(data){data.forEach((element) =>{%>
+        <div>
+            <h3>제목: <%=element.TITLE%></h3>
+            <P> 작성자: <%=element.ID%></P>
+            <p>작성일: <%=element.INS_DATE%></p>
+        </div>
+    <%})}else {%>
         <h1>게시글이 없습니다.</h1>
     <%}%>
     <%- include("partials/footer"); -%>

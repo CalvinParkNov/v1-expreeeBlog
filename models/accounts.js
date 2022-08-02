@@ -7,18 +7,20 @@ const Account = function (account) {
 
 Account.create = async (newAccount, result) => {
   const sqlQuery = `INSERT INTO USER SET ?`;
+
   await sql.query(sqlQuery, newAccount, (error, res) => {
     if (error) {
       return result(error, null);
     }
+    console.log(res);
     return result(null, { id: res.insertID, ...newAccount });
   });
 };
 
 Account.userLogin = async (userId, result) => {
-  let userData = "";
   //sql injection escape
   const exc_userId = sql.escape(userId.id);
+
   const sqlQuery = `SELECT
                             USER_ID,
                             ID,
@@ -27,12 +29,9 @@ Account.userLogin = async (userId, result) => {
                             USER
                       WHERE
                             ID = ${exc_userId}`;
-  const data = await sql.query(sqlQuery, (error, res) => {
-    if (error) {
-      return result(error, null);
-    }
-    if (!res.length) {
-    } else if (userId.password !== res[0].PASSWORD || !res.length) {
+
+  await sql.query(sqlQuery, (error, res) => {
+    if (!res.length || userId.password !== res[0].PASSWORD) {
       return result({ message: "비밀번호 또는 아이디를 확인해주세요." }, null);
     }
     return result(null, res[0]);

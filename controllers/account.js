@@ -1,10 +1,8 @@
 const Account = require("../models/accounts");
 const jwt = require("jsonwebtoken");
-const config = require("../config/authConfig");
 
 exports.loginPage = (req, res) => {
   const token = req.cookies.access_token;
-  console.log(req.headers.authorization);
   res.render("login", { token });
 };
 exports.login = (req, res) => {
@@ -14,31 +12,37 @@ exports.login = (req, res) => {
     return;
   }
   const login = new Account({ id, password });
-  Account.userLogin(login, (error, data) => {
-    if (error) {
-      return res.status(400).json({ message: error.message });
-    }
-    console.log(data.USER_ID, data.ID);
-    const token = jwt.sign(
-      { id: data.USER_ID, username: data.ID },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "15m",
+  try {
+    Account.userLogin(login, (error, data) => {
+      if (error) {
+        return res.status(400).json({ message: error.message });
       }
-    );
-    res.cookie("access_token", token, {
-      httpOnly: true,
-    });
+      console.log(data.USER_ID, data.ID);
+      const token = jwt.sign(
+        { id: data.USER_ID, username: data.ID },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "15m",
+        }
+      );
+      res.cookie("access_token", token, {
+        httpOnly: true,
+      });
 
-    return res.redirect("/");
-  });
+      return res.redirect("/");
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 exports.createAccountPage = (req, res) => {
-  res.render("createAccount");
+  const token = req.cookies.access_token;
+  res.render("createAccount", { token });
 };
 
 exports.createAccount = (req, res) => {
+  const token = req.cookies.access_token;
   const { id, password } = req.body;
   if (!id || !password) {
     return res.status(400).json({ msg: "아이디 또는 비밀번호를 입력해주세요" });
@@ -49,6 +53,6 @@ exports.createAccount = (req, res) => {
     if (error) {
       return res.status(400).json({ message: error.message });
     }
-    return res.render("welcome_account", { data });
+    return res.render("welcome_account", { data, token });
   });
 };
