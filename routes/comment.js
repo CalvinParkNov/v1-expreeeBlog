@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const task = require("../controllers/task");
+const comment = require("../controllers/comment");
 
-router.route("/").get(task.getAllTask);
-
+router.route("/").post(comment.insComment);
 module.exports = router;

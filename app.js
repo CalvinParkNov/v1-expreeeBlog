@@ -7,7 +7,8 @@ const account = require("./routes/account");
 const ejs = require("ejs");
 const _ = require("lodash");
 const tasks = require("./routes/task");
-const compose = require("./routes/compose");
+const compose = require("./routes/post");
+const comment = require("./routes/comment");
 const cookieParser = require("cookie-parser");
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,7 +20,8 @@ app.use("/logout", (req, res) => {
   res.clearCookie("access_token");
   res.redirect("/");
 });
-app.use("/compose", compose);
+app.use("/comment", comment);
+app.use("/post", compose);
 
 const port = process.env.PORT;
 

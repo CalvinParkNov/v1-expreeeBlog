@@ -1,0 +1,82 @@
+<%- include("partials/header"); -%>
+<div>
+    <input type="hidden" value="<%=data.POST_ID%>" id="post_id">
+    <h1><%=data.TITLE%>
+    </h1>
+    <p>
+        작성자:
+        <%=data.ID%></p>
+    <p>생성일:
+        <%=data.INS_DATE%></p>
+    <div>
+        <p>
+            <%=data.CONTENT%>
+        </p>
+    </div>
+    <%if(!like.length){%>
+    <button onclick="like_button(`<%=data.POST_ID%>`)" type="button">좋아요</button>
+    <%}else {%>
+        <p>이미 좋아요를 눌렀습니다.</p>
+        <%}%>
+
+
+<%if(commentsData){commentsData.forEach((element) =>{%>
+    <h6>작성자:<%= element.ID%></h6>
+    <p>댓글내용:<%= element.COMMENTS_CONTENT%></p>
+<%})}%>
+    <div class="form-group">
+        <h3>댓글 달기</h3>
+        <input type="text" name="comment" id="comment"></div>
+    <button onclick="save_comment()" type="button">댓글 남기기</button>
+
+</div>
+    <script>
+
+        //댓글 ajax
+        function save_comment() {
+            const comment = $("#comment").val();
+            const post_id = $("#post_id").val()
+            if (!comment) {
+                alert("댓글을 작성해주세요.")
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/comment",
+                data: {
+                    comment: comment,
+                    post_id: post_id
+                },
+                success: function (response) {
+                    alert(response.message)
+                    window
+                        .location
+                        .reload()
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+
+        }
+        function like_button(post_id) {
+                $.ajax({
+                    type: "POST",
+                    url: "/post/like",
+                    data: {
+                        post_id: post_id
+                    },
+                    success: function (response) {
+                        alert(response.message)
+                        window
+                            .location
+                            .reload()
+                    },
+                    error: function (request, status, error) {
+                        alert(request.responseText);
+                    }
+                });
+            }
+    </script>
+
+    <%- include("partials/footer"); -%>
